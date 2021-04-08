@@ -1,0 +1,5 @@
+{
+    "name": "@erc1155-arweave/base",
+    "private": true,
+    "workspaces": ["contracts", "frontend"]
+}
