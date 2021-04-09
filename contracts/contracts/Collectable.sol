@@ -15,13 +15,12 @@ contract Collectable is ERC1155, Ownable {
     }
 
     string public name;
-    string private _uri;
     bool private _everyoneMint;
-    uint16 _atToken;
-    uint16 _collectionId;
-    mapping(uint16 => string) _collections;
-    mapping(uint16 => uint256) _collectionOffset;
-    mapping(uint256 => uint16) _idToCollection;
+    uint16 private _atToken;
+    uint16 private _collectionId;
+    mapping(uint16 => string) private _collections;
+    mapping(uint16 => uint256) private _collectionOffset;
+    mapping(uint256 => uint16) private _idToCollection;
 
     function uri(uint256 id) public view virtual override returns (string memory) {
         if (_idToCollection[id] != 0) {
@@ -75,10 +74,6 @@ contract Collectable is ERC1155, Ownable {
         _idToCollection[_atToken + 1] = _addCollection(baseURI);
         _atToken += 1;
         _mint(_msgSender(), _atToken, editions, "");
-    }
-
-    function setBaseURI(string memory ipfsBaseURI) public onlyOwner {
-        _uri = ipfsBaseURI;
     }
 
     function mintBatch(uint8 size, string memory baseURI, uint16 editions) public {
