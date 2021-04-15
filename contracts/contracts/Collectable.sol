@@ -1,6 +1,6 @@
 // contracts/GameItems.sol
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.1;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -9,15 +9,29 @@ string constant METADATA_FILEPATH = ".json";
 string constant METADATA_SEPERATOR = "/";
 
 contract Collectable is ERC1155, Ownable {
+    /*
+     * bytes4(keccak256('getFeeBps(uint256)')) == 0x0ebd4c7f
+     * bytes4(keccak256('getFeeRecipients(uint256)')) == 0xb9c4d9fb
+     *
+     * => 0x0ebd4c7f ^ 0xb9c4d9fb == 0xb7799584
+     */
+    // bytes4 private constant _INTERFACE_ID_FEES = 0xb7799584;
+
     constructor(string memory collectableName, bool everyoneMint) ERC1155("") {
         _everyoneMint = everyoneMint;
+        // _feeBPS = 1500;
         name = collectableName;
     }
+
+    // function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
+    //   return interfaceId == _INTERFACE_ID_FEES || super.supportsInterface(interfaceId);
+    // }
 
     string public name;
     bool private _everyoneMint;
     uint16 private _atToken;
     uint16 private _collectionId;
+    // uint16 private _feeBPS;
     mapping(uint16 => string) private _collections;
     mapping(uint16 => uint256) private _collectionOffset;
     mapping(uint256 => uint16) private _idToCollection;

@@ -1,0 +1,3 @@
+mp4,https://arweave.net/cZXpqHjX0lhuJRpDorqsFGbttsKx1WolPCDQlc4af34
+gif,https://arweave.net/zwc_ZkIss-fjC7LeW1QUQ9sfvk7gfJk362FFYmxZVa0
+manifest,https://arweave.net/HFDn1xknDyhjL3WRmOyCpXEsdmS4aysxd_mZgooJrio

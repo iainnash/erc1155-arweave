@@ -2,6 +2,7 @@ import "@nomiclabs/hardhat-waffle";
 import "hardhat-gas-reporter";
 import "hardhat-typechain";
 import "hardhat-deploy";
+import "@nomiclabs/hardhat-etherscan";
 import { task } from "hardhat/config";
 import { HardhatUserConfig } from "hardhat/config";
 import NETWORKS_CONFIG from './networks.private.json';
@@ -23,7 +24,14 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
  * @type import('hardhat/config').HardhatUserConfig
  */
 const config: HardhatUserConfig = {
-  defaultNetwork: 'rinkeby',
+  defaultNetwork: 'hardhat',
+  etherscan: {
+    apiKey: "F3CECMYDCKR5SNEF1NSH46BF8VQWN3HAGX",
+  },
+  gasReporter: {
+    currency: 'USD',
+    gasPrice: 90, 
+  },
   networks: {
     hardhat: {
       // fix metamask
@@ -36,11 +44,11 @@ const config: HardhatUserConfig = {
     purchaser: 0,
   },
   solidity: {
-    version: "0.8.0",
+    version: "0.8.1",
     settings: {
       optimizer: {
         enabled: true,
-        runs: 300,
+        runs: 50,
       },
     },
   },

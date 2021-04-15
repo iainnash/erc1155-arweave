@@ -1,6 +1,5 @@
 import { expect } from "chai";
 import "@nomiclabs/hardhat-ethers";
-import deployments from "hardhat-deploy";
 import { ethers } from "hardhat";
 
 import { Collectable } from "../typechain/Collectable";
@@ -16,13 +15,16 @@ describe("Collectable", function () {
 
     expect(await collectableInstance.uri(1)).to.equal("");
 
-    await collectableInstance.mint("https://ipfs.io/ipfs/9ajfw9jf9jawf9j", 1);
-    const balance = await collectableInstance.balanceOf(signerAddress, 1);
-    expect(balance).to.equal(1);
+    const mintr = await collectableInstance.mint("https://ipfs.io/ipfs/9ajfw9jf9jawf9j", 1);
 
     const simple = await collectableInstance.uri(1);
     expect(simple).to.equal("https://ipfs.io/ipfs/9ajfw9jf9jawf9j/1.json");
+
+    const balance = await collectableInstance.balanceOf(signerAddress, 1);
+    expect(balance).to.equal(1);
+
   });
+
   it("CollectableContract mint multiple", async () => {
     const CollectableContract = await ethers.getContractFactory("Collectable");
     const collectableInstance = (await CollectableContract.deploy("", false)) as Collectable;

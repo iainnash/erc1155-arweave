@@ -34,7 +34,6 @@ interface CollectableInterface extends ethers.utils.Interface {
     "safeBatchTransferFrom(address,address,uint256[],uint256[],bytes)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
-    "setBaseURI(string)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "uri(uint256)": FunctionFragment;
@@ -82,7 +81,6 @@ interface CollectableInterface extends ethers.utils.Interface {
     functionFragment: "setApprovalForAll",
     values: [string, boolean]
   ): string;
-  encodeFunctionData(functionFragment: "setBaseURI", values: [string]): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
@@ -126,7 +124,6 @@ interface CollectableInterface extends ethers.utils.Interface {
     functionFragment: "setApprovalForAll",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "setBaseURI", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
@@ -330,16 +327,6 @@ export class Collectable extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
-    setBaseURI(
-      ipfsBaseURI: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "setBaseURI(string)"(
-      ipfsBaseURI: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -508,16 +495,6 @@ export class Collectable extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
-  setBaseURI(
-    ipfsBaseURI: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "setBaseURI(string)"(
-    ipfsBaseURI: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
   supportsInterface(
     interfaceId: BytesLike,
     overrides?: CallOverrides
@@ -669,13 +646,6 @@ export class Collectable extends Contract {
     "setApprovalForAll(address,bool)"(
       operator: string,
       approved: boolean,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setBaseURI(ipfsBaseURI: string, overrides?: CallOverrides): Promise<void>;
-
-    "setBaseURI(string)"(
-      ipfsBaseURI: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -871,13 +841,6 @@ export class Collectable extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
-    setBaseURI(ipfsBaseURI: string, overrides?: Overrides): Promise<BigNumber>;
-
-    "setBaseURI(string)"(
-      ipfsBaseURI: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -1036,16 +999,6 @@ export class Collectable extends Contract {
     "setApprovalForAll(address,bool)"(
       operator: string,
       approved: boolean,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    setBaseURI(
-      ipfsBaseURI: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "setBaseURI(string)"(
-      ipfsBaseURI: string,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 

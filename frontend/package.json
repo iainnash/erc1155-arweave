@@ -20,8 +20,10 @@
     },
     "dependencies": {
         "@erc1155-arweave/contracts": "^0.0.1",
+        "@rjsf/core": "^2.5.1",
         "@walletconnect/web3-provider": "^1.4.1",
         "@web3-react/core": "^6.1.9",
+        "arweave": "^1.10.13",
         "babel-loader": "^8.2.2",
         "body-parser": "^1.19.0",
         "buffer": "^6.0.3",
