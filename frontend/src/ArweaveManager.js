@@ -1,24 +1,23 @@
 import Arweave from "arweave";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 function ArweaveManager({hasWallet: updateWalletParent}) {
-  const { arweave, info } = useMemo(async () => {
+  const arweave = useMemo(() => {
     const arweave = Arweave.init();
-    const info = await arweave.getInfo();
-    return {
-      arweave,
-      info,
-    };
+    // const info = await arweave.network.getInfo();
+    // console.log(info);
+    return arweave;
   });
 
   const [wallet, setWallet] = useState(null);
 
-  const hasWallet = (wallet) => {
+  const hasWallet = (wallet) => useCallback(async () => {
+    console.log(wallet)
     const walletJson = JSON.parse(wallet);
-    const address = arweave.wallet.jwkToAddress(walletJson);
+    const address = await arweave.wallets.jwkToAddress(walletJson);
     setWallet({ walletJson, address });
     updateWalletParent(walletJson);
-  };
+  });
 
   const hasWalletFile = (evt) => {
     const input = evt.target;
@@ -27,6 +26,7 @@ function ArweaveManager({hasWallet: updateWalletParent}) {
       reader.addEventListener("load", (e) => {
         hasWallet(e.target.result);
       });
+      reader.readAsText(input.files[0]);
     }
   };
 
@@ -35,7 +35,7 @@ function ArweaveManager({hasWallet: updateWalletParent}) {
       <div>Arweave Wallet</div>
       <div>{wallet ? wallet.address : "Not connected"}</div>
       <div>Upload wallet:</div>
-      <input type="file" onChange={hasWallet} />
+      <input type="file" onChange={hasWalletFile} />
     </div>
   );
 }

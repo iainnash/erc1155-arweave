@@ -1,1 +1,1 @@
-module.exports = ["ARWeaveCollectable", true]
+module.exports = ["ARWeaveCollectable"]

@@ -6,6 +6,7 @@ import "@nomiclabs/hardhat-etherscan";
 import { task } from "hardhat/config";
 import { HardhatUserConfig } from "hardhat/config";
 import NETWORKS_CONFIG from './networks.private.json';
+import apikeys from './apikeys.private.json';
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -26,11 +27,12 @@ task("accounts", "Prints the list of accounts", async (args, hre) => {
 const config: HardhatUserConfig = {
   defaultNetwork: 'hardhat',
   etherscan: {
-    apiKey: "F3CECMYDCKR5SNEF1NSH46BF8VQWN3HAGX",
+    apiKey: apikeys.etherscan,
   },
   gasReporter: {
     currency: 'USD',
     gasPrice: 90, 
+    coinmarketcap: apikeys.coinmarketcap,
   },
   networks: {
     hardhat: {

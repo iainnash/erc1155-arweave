@@ -9,29 +9,17 @@ string constant METADATA_FILEPATH = ".json";
 string constant METADATA_SEPERATOR = "/";
 
 contract Collectable is ERC1155, Ownable {
-    /*
-     * bytes4(keccak256('getFeeBps(uint256)')) == 0x0ebd4c7f
-     * bytes4(keccak256('getFeeRecipients(uint256)')) == 0xb9c4d9fb
-     *
-     * => 0x0ebd4c7f ^ 0xb9c4d9fb == 0xb7799584
-     */
-    // bytes4 private constant _INTERFACE_ID_FEES = 0xb7799584;
-
-    constructor(string memory collectableName, bool everyoneMint) ERC1155("") {
-        _everyoneMint = everyoneMint;
-        // _feeBPS = 1500;
+    constructor(string memory collectableName, bool everyoneMintInput) ERC1155("") {
+        everyoneMint = everyoneMintInput;
         name = collectableName;
     }
 
-    // function supportsInterface(bytes4 interfaceId) public view virtual override returns (bool) {
-    //   return interfaceId == _INTERFACE_ID_FEES || super.supportsInterface(interfaceId);
-    // }
-
     string public name;
-    bool private _everyoneMint;
-    uint16 private _atToken;
+    bool public everyoneMint;
+
+    uint16 public atToken;
     uint16 private _collectionId;
-    // uint16 private _feeBPS;
+
     mapping(uint16 => string) private _collections;
     mapping(uint16 => uint256) private _collectionOffset;
     mapping(uint256 => uint16) private _idToCollection;
@@ -74,7 +62,7 @@ contract Collectable is ERC1155, Ownable {
 
     function _addCollection(string memory dirHash) internal returns (uint16) {
         _collectionId += 1;
-        _collectionOffset[_collectionId] = _atToken;
+        _collectionOffset[_collectionId] = atToken;
         _collections[_collectionId] = dirHash;
         return _collectionId;
     }
@@ -84,19 +72,19 @@ contract Collectable is ERC1155, Ownable {
     }
 
     function mint(string memory baseURI, uint16 editions) public {
-        require(_everyoneMint || owner() == _msgSender(), "Ownable: caller is not the owner");
-        _idToCollection[_atToken + 1] = _addCollection(baseURI);
-        _atToken += 1;
-        _mint(_msgSender(), _atToken, editions, "");
+        require(everyoneMint || owner() == _msgSender(), "Ownable: caller is not the owner");
+        _idToCollection[atToken + 1] = _addCollection(baseURI);
+        atToken += 1;
+        _mint(_msgSender(), atToken, editions, "");
     }
 
     function mintBatch(uint8 size, string memory baseURI, uint16 editions) public {
-        require(_everyoneMint || owner() == _msgSender(), "Ownable: caller is not the owner");
+        require(everyoneMint || owner() == _msgSender(), "Ownable: caller is not the owner");
         _addCollection(baseURI);
         for (uint8 i = 0; i < size; i += 1) {
-            _atToken += 1;
-            _idToCollection[_atToken] = _collectionId;
-            _mint(_msgSender(), _atToken, editions, "");
+            atToken += 1;
+            _idToCollection[atToken] = _collectionId;
+            _mint(_msgSender(), atToken, editions, "");
         }
     }
 }

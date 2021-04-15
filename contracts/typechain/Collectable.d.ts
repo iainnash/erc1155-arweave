@@ -22,8 +22,10 @@ import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 
 interface CollectableInterface extends ethers.utils.Interface {
   functions: {
+    "atToken()": FunctionFragment;
     "balanceOf(address,uint256)": FunctionFragment;
     "balanceOfBatch(address[],uint256[])": FunctionFragment;
+    "everyoneMint()": FunctionFragment;
     "getCollection(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "mint(string,uint16)": FunctionFragment;
@@ -39,6 +41,7 @@ interface CollectableInterface extends ethers.utils.Interface {
     "uri(uint256)": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "atToken", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "balanceOf",
     values: [string, BigNumberish]
@@ -46,6 +49,10 @@ interface CollectableInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "balanceOfBatch",
     values: [string[], BigNumberish[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "everyoneMint",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getCollection",
@@ -91,9 +98,14 @@ interface CollectableInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "uri", values: [BigNumberish]): string;
 
+  decodeFunctionResult(functionFragment: "atToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "balanceOfBatch",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "everyoneMint",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -163,6 +175,18 @@ export class Collectable extends Contract {
   interface: CollectableInterface;
 
   functions: {
+    atToken(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: number;
+    }>;
+
+    "atToken()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: number;
+    }>;
+
     balanceOf(
       account: string,
       id: BigNumberish,
@@ -193,6 +217,18 @@ export class Collectable extends Contract {
       overrides?: CallOverrides
     ): Promise<{
       0: BigNumber[];
+    }>;
+
+    everyoneMint(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: boolean;
+    }>;
+
+    "everyoneMint()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: boolean;
     }>;
 
     getCollection(
@@ -366,6 +402,10 @@ export class Collectable extends Contract {
     }>;
   };
 
+  atToken(overrides?: CallOverrides): Promise<number>;
+
+  "atToken()"(overrides?: CallOverrides): Promise<number>;
+
   balanceOf(
     account: string,
     id: BigNumberish,
@@ -389,6 +429,10 @@ export class Collectable extends Contract {
     ids: BigNumberish[],
     overrides?: CallOverrides
   ): Promise<BigNumber[]>;
+
+  everyoneMint(overrides?: CallOverrides): Promise<boolean>;
+
+  "everyoneMint()"(overrides?: CallOverrides): Promise<boolean>;
 
   getCollection(id: BigNumberish, overrides?: CallOverrides): Promise<number>;
 
@@ -520,6 +564,10 @@ export class Collectable extends Contract {
   "uri(uint256)"(id: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    atToken(overrides?: CallOverrides): Promise<number>;
+
+    "atToken()"(overrides?: CallOverrides): Promise<number>;
+
     balanceOf(
       account: string,
       id: BigNumberish,
@@ -543,6 +591,10 @@ export class Collectable extends Contract {
       ids: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
+
+    everyoneMint(overrides?: CallOverrides): Promise<boolean>;
+
+    "everyoneMint()"(overrides?: CallOverrides): Promise<boolean>;
 
     getCollection(id: BigNumberish, overrides?: CallOverrides): Promise<number>;
 
@@ -709,6 +761,10 @@ export class Collectable extends Contract {
   };
 
   estimateGas: {
+    atToken(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "atToken()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     balanceOf(
       account: string,
       id: BigNumberish,
@@ -732,6 +788,10 @@ export class Collectable extends Contract {
       ids: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    everyoneMint(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "everyoneMint()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     getCollection(
       id: BigNumberish,
@@ -870,6 +930,10 @@ export class Collectable extends Contract {
   };
 
   populateTransaction: {
+    atToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "atToken()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     balanceOf(
       account: string,
       id: BigNumberish,
@@ -893,6 +957,10 @@ export class Collectable extends Contract {
       ids: BigNumberish[],
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    everyoneMint(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "everyoneMint()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getCollection(
       id: BigNumberish,
