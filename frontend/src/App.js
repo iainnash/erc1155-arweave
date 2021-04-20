@@ -35,6 +35,9 @@ const schema = {
           animation_url: {
             type: "string",
           },
+          external_url: {
+            type: "string",
+          },
         },
       },
     },
@@ -85,9 +88,11 @@ const widgets = {
     };
     return (
       <div>
+        <p>{status}</p>
         <p>
-          {status}
-          {value || "not uploaded"}{"has arweave txn"}
+          {value || "not uploaded"}
+        </p>
+        <p>
           {value ? (
             <button onClick={replace}>clear</button>
           ) : (
@@ -109,6 +114,9 @@ const uiSchema = {
       },
       animation_url: {
         "ui:widget": "Uploader",
+      },
+      description: {
+        "ui:widget": "textarea",
       },
     },
   },

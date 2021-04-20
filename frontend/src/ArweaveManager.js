@@ -11,7 +11,7 @@ function ArweaveManager({hasWallet: updateWalletParent}) {
 
   const [wallet, setWallet] = useState(null);
 
-  const hasWallet = (wallet) => useCallback(async () => {
+  const hasWallet = useCallback(async (wallet) => {
     console.log(wallet)
     const walletJson = JSON.parse(wallet);
     const address = await arweave.wallets.jwkToAddress(walletJson);
