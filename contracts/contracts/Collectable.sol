@@ -9,12 +9,13 @@ string constant METADATA_FILEPATH = ".json";
 string constant METADATA_SEPERATOR = "/";
 
 contract Collectable is ERC1155, Ownable {
-    constructor(string memory collectableName, bool everyoneMintInput) ERC1155("") {
-        everyoneMint = everyoneMintInput;
+    constructor(string memory collectableName, string memory collectableSymbol) ERC1155("") {
         name = collectableName;
+        symbol = collectableSymbol;
     }
 
     string public name;
+    string public symbol;
     bool public everyoneMint;
 
     uint16 public atToken;
@@ -37,8 +38,7 @@ contract Collectable is ERC1155, Ownable {
         return "";
     }
 
-    // TODO(validate): copied code
-    function uint2str(uint _i) internal pure returns (string memory _uintAsString) {
+    function uint2str(uint _i) internal pure returns (string memory ) {
         if (_i == 0) {
             return "0";
         }
@@ -71,14 +71,13 @@ contract Collectable is ERC1155, Ownable {
         return _idToCollection[id];
     }
 
-    function mint(string memory baseURI, uint16 editions) public {
-        require(everyoneMint || owner() == _msgSender(), "Ownable: caller is not the owner");
+    function mint(string memory baseURI, uint16 editions) public onlyOwner {
         _idToCollection[atToken + 1] = _addCollection(baseURI);
         atToken += 1;
         _mint(_msgSender(), atToken, editions, "");
     }
 
-    function mintBatch(uint8 size, string memory baseURI, uint16 editions) public {
+    function mintBatch(uint8 size, string memory baseURI, uint16 editions) public onlyOwner {
         require(everyoneMint || owner() == _msgSender(), "Ownable: caller is not the owner");
         _addCollection(baseURI);
         for (uint8 i = 0; i < size; i += 1) {

@@ -20,29 +20,20 @@ import { BytesLike } from "@ethersproject/bytes";
 import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 
-interface CollectableInterface extends ethers.utils.Interface {
+interface Erc1155BurnableInterface extends ethers.utils.Interface {
   functions: {
-    "atToken()": FunctionFragment;
     "balanceOf(address,uint256)": FunctionFragment;
     "balanceOfBatch(address[],uint256[])": FunctionFragment;
-    "everyoneMint()": FunctionFragment;
-    "getCollection(uint256)": FunctionFragment;
+    "burn(address,uint256,uint256)": FunctionFragment;
+    "burnBatch(address,uint256[],uint256[])": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mint(string,uint16)": FunctionFragment;
-    "mintBatch(uint8,string,uint16)": FunctionFragment;
-    "name()": FunctionFragment;
-    "owner()": FunctionFragment;
-    "renounceOwnership()": FunctionFragment;
     "safeBatchTransferFrom(address,address,uint256[],uint256[],bytes)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
-    "symbol()": FunctionFragment;
-    "transferOwnership(address)": FunctionFragment;
     "uri(uint256)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "atToken", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "balanceOf",
     values: [string, BigNumberish]
@@ -52,30 +43,16 @@ interface CollectableInterface extends ethers.utils.Interface {
     values: [string[], BigNumberish[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "everyoneMint",
-    values?: undefined
+    functionFragment: "burn",
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getCollection",
-    values: [BigNumberish]
+    functionFragment: "burnBatch",
+    values: [string, BigNumberish[], BigNumberish[]]
   ): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [string, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "mint",
-    values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "mintBatch",
-    values: [BigNumberish, string, BigNumberish]
-  ): string;
-  encodeFunctionData(functionFragment: "name", values?: undefined): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "renounceOwnership",
-    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "safeBatchTransferFrom",
@@ -93,37 +70,17 @@ interface CollectableInterface extends ethers.utils.Interface {
     functionFragment: "supportsInterface",
     values: [BytesLike]
   ): string;
-  encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "transferOwnership",
-    values: [string]
-  ): string;
   encodeFunctionData(functionFragment: "uri", values: [BigNumberish]): string;
 
-  decodeFunctionResult(functionFragment: "atToken", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "balanceOfBatch",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "everyoneMint",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getCollection",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "burnBatch", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "mintBatch", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -142,29 +99,22 @@ interface CollectableInterface extends ethers.utils.Interface {
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "transferOwnership",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "uri", data: BytesLike): Result;
 
   events: {
     "ApprovalForAll(address,address,bool)": EventFragment;
-    "OwnershipTransferred(address,address)": EventFragment;
     "TransferBatch(address,address,address,uint256[],uint256[])": EventFragment;
     "TransferSingle(address,address,address,uint256,uint256)": EventFragment;
     "URI(string,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TransferBatch"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TransferSingle"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "URI"): EventFragment;
 }
 
-export class Collectable extends Contract {
+export class Erc1155Burnable extends Contract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -175,21 +125,9 @@ export class Collectable extends Contract {
   removeAllListeners(eventName: EventFilter | string): this;
   removeListener(eventName: any, listener: Listener): this;
 
-  interface: CollectableInterface;
+  interface: Erc1155BurnableInterface;
 
   functions: {
-    atToken(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: number;
-    }>;
-
-    "atToken()"(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: number;
-    }>;
-
     balanceOf(
       account: string,
       id: BigNumberish,
@@ -222,31 +160,33 @@ export class Collectable extends Contract {
       0: BigNumber[];
     }>;
 
-    everyoneMint(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: boolean;
-    }>;
-
-    "everyoneMint()"(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: boolean;
-    }>;
-
-    getCollection(
+    burn(
+      account: string,
       id: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<{
-      0: number;
-    }>;
+      value: BigNumberish,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
 
-    "getCollection(uint256)"(
+    "burn(address,uint256,uint256)"(
+      account: string,
       id: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<{
-      0: number;
-    }>;
+      value: BigNumberish,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    burnBatch(
+      account: string,
+      ids: BigNumberish[],
+      values: BigNumberish[],
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "burnBatch(address,uint256[],uint256[])"(
+      account: string,
+      ids: BigNumberish[],
+      values: BigNumberish[],
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
 
     isApprovedForAll(
       account: string,
@@ -263,60 +203,6 @@ export class Collectable extends Contract {
     ): Promise<{
       0: boolean;
     }>;
-
-    mint(
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "mint(string,uint16)"(
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    mintBatch(
-      size: BigNumberish,
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "mintBatch(uint8,string,uint16)"(
-      size: BigNumberish,
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    name(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: string;
-    }>;
-
-    "name()"(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: string;
-    }>;
-
-    owner(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: string;
-    }>;
-
-    "owner()"(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: string;
-    }>;
-
-    renounceOwnership(overrides?: Overrides): Promise<ContractTransaction>;
-
-    "renounceOwnership()"(overrides?: Overrides): Promise<ContractTransaction>;
 
     safeBatchTransferFrom(
       from: string,
@@ -380,46 +266,20 @@ export class Collectable extends Contract {
       0: boolean;
     }>;
 
-    symbol(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: string;
-    }>;
-
-    "symbol()"(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: string;
-    }>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
-    "transferOwnership(address)"(
-      newOwner: string,
-      overrides?: Overrides
-    ): Promise<ContractTransaction>;
-
     uri(
-      id: BigNumberish,
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<{
       0: string;
     }>;
 
     "uri(uint256)"(
-      id: BigNumberish,
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<{
       0: string;
     }>;
   };
-
-  atToken(overrides?: CallOverrides): Promise<number>;
-
-  "atToken()"(overrides?: CallOverrides): Promise<number>;
 
   balanceOf(
     account: string,
@@ -445,16 +305,33 @@ export class Collectable extends Contract {
     overrides?: CallOverrides
   ): Promise<BigNumber[]>;
 
-  everyoneMint(overrides?: CallOverrides): Promise<boolean>;
-
-  "everyoneMint()"(overrides?: CallOverrides): Promise<boolean>;
-
-  getCollection(id: BigNumberish, overrides?: CallOverrides): Promise<number>;
-
-  "getCollection(uint256)"(
+  burn(
+    account: string,
     id: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<number>;
+    value: BigNumberish,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "burn(address,uint256,uint256)"(
+    account: string,
+    id: BigNumberish,
+    value: BigNumberish,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  burnBatch(
+    account: string,
+    ids: BigNumberish[],
+    values: BigNumberish[],
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "burnBatch(address,uint256[],uint256[])"(
+    account: string,
+    ids: BigNumberish[],
+    values: BigNumberish[],
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
 
   isApprovedForAll(
     account: string,
@@ -467,44 +344,6 @@ export class Collectable extends Contract {
     operator: string,
     overrides?: CallOverrides
   ): Promise<boolean>;
-
-  mint(
-    baseURI: string,
-    editions: BigNumberish,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "mint(string,uint16)"(
-    baseURI: string,
-    editions: BigNumberish,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  mintBatch(
-    size: BigNumberish,
-    baseURI: string,
-    editions: BigNumberish,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "mintBatch(uint8,string,uint16)"(
-    size: BigNumberish,
-    baseURI: string,
-    editions: BigNumberish,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  name(overrides?: CallOverrides): Promise<string>;
-
-  "name()"(overrides?: CallOverrides): Promise<string>;
-
-  owner(overrides?: CallOverrides): Promise<string>;
-
-  "owner()"(overrides?: CallOverrides): Promise<string>;
-
-  renounceOwnership(overrides?: Overrides): Promise<ContractTransaction>;
-
-  "renounceOwnership()"(overrides?: Overrides): Promise<ContractTransaction>;
 
   safeBatchTransferFrom(
     from: string,
@@ -564,29 +403,14 @@ export class Collectable extends Contract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  symbol(overrides?: CallOverrides): Promise<string>;
+  uri(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-  "symbol()"(overrides?: CallOverrides): Promise<string>;
-
-  transferOwnership(
-    newOwner: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  "transferOwnership(address)"(
-    newOwner: string,
-    overrides?: Overrides
-  ): Promise<ContractTransaction>;
-
-  uri(id: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
-  "uri(uint256)"(id: BigNumberish, overrides?: CallOverrides): Promise<string>;
+  "uri(uint256)"(
+    arg0: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   callStatic: {
-    atToken(overrides?: CallOverrides): Promise<number>;
-
-    "atToken()"(overrides?: CallOverrides): Promise<number>;
-
     balanceOf(
       account: string,
       id: BigNumberish,
@@ -611,16 +435,33 @@ export class Collectable extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
 
-    everyoneMint(overrides?: CallOverrides): Promise<boolean>;
-
-    "everyoneMint()"(overrides?: CallOverrides): Promise<boolean>;
-
-    getCollection(id: BigNumberish, overrides?: CallOverrides): Promise<number>;
-
-    "getCollection(uint256)"(
+    burn(
+      account: string,
       id: BigNumberish,
+      value: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<number>;
+    ): Promise<void>;
+
+    "burn(address,uint256,uint256)"(
+      account: string,
+      id: BigNumberish,
+      value: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    burnBatch(
+      account: string,
+      ids: BigNumberish[],
+      values: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "burnBatch(address,uint256[],uint256[])"(
+      account: string,
+      ids: BigNumberish[],
+      values: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     isApprovedForAll(
       account: string,
@@ -633,44 +474,6 @@ export class Collectable extends Contract {
       operator: string,
       overrides?: CallOverrides
     ): Promise<boolean>;
-
-    mint(
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "mint(string,uint16)"(
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    mintBatch(
-      size: BigNumberish,
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "mintBatch(uint8,string,uint16)"(
-      size: BigNumberish,
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    name(overrides?: CallOverrides): Promise<string>;
-
-    "name()"(overrides?: CallOverrides): Promise<string>;
-
-    owner(overrides?: CallOverrides): Promise<string>;
-
-    "owner()"(overrides?: CallOverrides): Promise<string>;
-
-    renounceOwnership(overrides?: CallOverrides): Promise<void>;
-
-    "renounceOwnership()"(overrides?: CallOverrides): Promise<void>;
 
     safeBatchTransferFrom(
       from: string,
@@ -730,24 +533,10 @@ export class Collectable extends Contract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    symbol(overrides?: CallOverrides): Promise<string>;
-
-    "symbol()"(overrides?: CallOverrides): Promise<string>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    "transferOwnership(address)"(
-      newOwner: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    uri(id: BigNumberish, overrides?: CallOverrides): Promise<string>;
+    uri(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     "uri(uint256)"(
-      id: BigNumberish,
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
   };
@@ -757,11 +546,6 @@ export class Collectable extends Contract {
       account: string | null,
       operator: string | null,
       approved: null
-    ): EventFilter;
-
-    OwnershipTransferred(
-      previousOwner: string | null,
-      newOwner: string | null
     ): EventFilter;
 
     TransferBatch(
@@ -784,10 +568,6 @@ export class Collectable extends Contract {
   };
 
   estimateGas: {
-    atToken(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "atToken()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     balanceOf(
       account: string,
       id: BigNumberish,
@@ -812,18 +592,32 @@ export class Collectable extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    everyoneMint(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "everyoneMint()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getCollection(
+    burn(
+      account: string,
       id: BigNumberish,
-      overrides?: CallOverrides
+      value: BigNumberish,
+      overrides?: Overrides
     ): Promise<BigNumber>;
 
-    "getCollection(uint256)"(
+    "burn(address,uint256,uint256)"(
+      account: string,
       id: BigNumberish,
-      overrides?: CallOverrides
+      value: BigNumberish,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    burnBatch(
+      account: string,
+      ids: BigNumberish[],
+      values: BigNumberish[],
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "burnBatch(address,uint256[],uint256[])"(
+      account: string,
+      ids: BigNumberish[],
+      values: BigNumberish[],
+      overrides?: Overrides
     ): Promise<BigNumber>;
 
     isApprovedForAll(
@@ -837,44 +631,6 @@ export class Collectable extends Contract {
       operator: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    mint(
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    "mint(string,uint16)"(
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    mintBatch(
-      size: BigNumberish,
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    "mintBatch(uint8,string,uint16)"(
-      size: BigNumberish,
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    name(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "name()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    owner(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "owner()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    renounceOwnership(overrides?: Overrides): Promise<BigNumber>;
-
-    "renounceOwnership()"(overrides?: Overrides): Promise<BigNumber>;
 
     safeBatchTransferFrom(
       from: string,
@@ -934,33 +690,15 @@ export class Collectable extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    symbol(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "symbol()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    "transferOwnership(address)"(
-      newOwner: string,
-      overrides?: Overrides
-    ): Promise<BigNumber>;
-
-    uri(id: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    uri(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
 
     "uri(uint256)"(
-      id: BigNumberish,
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    atToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "atToken()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     balanceOf(
       account: string,
       id: BigNumberish,
@@ -985,18 +723,32 @@ export class Collectable extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    everyoneMint(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "everyoneMint()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getCollection(
+    burn(
+      account: string,
       id: BigNumberish,
-      overrides?: CallOverrides
+      value: BigNumberish,
+      overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
-    "getCollection(uint256)"(
+    "burn(address,uint256,uint256)"(
+      account: string,
       id: BigNumberish,
-      overrides?: CallOverrides
+      value: BigNumberish,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    burnBatch(
+      account: string,
+      ids: BigNumberish[],
+      values: BigNumberish[],
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "burnBatch(address,uint256[],uint256[])"(
+      account: string,
+      ids: BigNumberish[],
+      values: BigNumberish[],
+      overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 
     isApprovedForAll(
@@ -1010,44 +762,6 @@ export class Collectable extends Contract {
       operator: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
-
-    mint(
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "mint(string,uint16)"(
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    mintBatch(
-      size: BigNumberish,
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "mintBatch(uint8,string,uint16)"(
-      size: BigNumberish,
-      baseURI: string,
-      editions: BigNumberish,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "name()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "owner()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    renounceOwnership(overrides?: Overrides): Promise<PopulatedTransaction>;
-
-    "renounceOwnership()"(overrides?: Overrides): Promise<PopulatedTransaction>;
 
     safeBatchTransferFrom(
       from: string,
@@ -1107,27 +821,13 @@ export class Collectable extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    "symbol()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    transferOwnership(
-      newOwner: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
-    "transferOwnership(address)"(
-      newOwner: string,
-      overrides?: Overrides
-    ): Promise<PopulatedTransaction>;
-
     uri(
-      id: BigNumberish,
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     "uri(uint256)"(
-      id: BigNumberish,
+      arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

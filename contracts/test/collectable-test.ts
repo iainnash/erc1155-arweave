@@ -9,7 +9,7 @@ describe("Collectable", function () {
   it("CollectableContract mint 1", async () => {
     
     const CollectableContract = await ethers.getContractFactory("Collectable");
-    const collectableInstance = (await CollectableContract.deploy("", false)) as Collectable;
+    const collectableInstance = (await CollectableContract.deploy("", "")) as Collectable;
     const [signer] = await ethers.getSigners();
     const signerAddress = await signer.getAddress();
 
@@ -27,7 +27,7 @@ describe("Collectable", function () {
 
   it("CollectableContract mint multiple", async () => {
     const CollectableContract = await ethers.getContractFactory("Collectable");
-    const collectableInstance = (await CollectableContract.deploy("", false)) as Collectable;
+    const collectableInstance = (await CollectableContract.deploy("", "")) as Collectable;
     const [signer] = await ethers.getSigners();
     const signerAddress = await signer.getAddress();
 
@@ -50,7 +50,7 @@ describe("Collectable", function () {
 
   it("CollectableContract mint editions", async () => {
     const CollectableContract = await ethers.getContractFactory("Collectable");
-    const collectableInstance = (await CollectableContract.deploy("", false)) as Collectable;
+    const collectableInstance = (await CollectableContract.deploy("", "")) as Collectable;
     const [signer] = await ethers.getSigners();
     const signerAddress = await signer.getAddress();
 
@@ -74,7 +74,7 @@ describe("Collectable", function () {
 
   it("CollectableContract mint multiple 2", async () => {
     const CollectableContract = await ethers.getContractFactory("Collectable");
-    const collectableInstance = (await CollectableContract.deploy("", false)) as Collectable;
+    const collectableInstance = (await CollectableContract.deploy("", "")) as Collectable;
     const [signer] = await ethers.getSigners();
     const signerAddress = await signer.getAddress();
 
@@ -109,7 +109,7 @@ describe("Collectable", function () {
 
   it("CollectableContract purchase", async () => {
     const CollectableContract = await ethers.getContractFactory("Collectable");
-    const collectableInstance = (await CollectableContract.deploy("", false)) as Collectable;
+    const collectableInstance = (await CollectableContract.deploy("", "")) as Collectable;
     const MarketplaceContract = await ethers.getContractFactory("Marketplace");
     const marketplaceInstance = (await MarketplaceContract.deploy(
       collectableInstance.address
